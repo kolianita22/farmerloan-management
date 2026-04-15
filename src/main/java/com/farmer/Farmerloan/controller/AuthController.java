@@ -21,11 +21,12 @@ public class AuthController {
 
     @Autowired
     private Otpservice otpService;
+    
     @GetMapping("/")
     public String home() {
-        return "home";
+        return "API Running";
     }
-   
+    
 
     // 1. Open Login Page
     @GetMapping("/login")
