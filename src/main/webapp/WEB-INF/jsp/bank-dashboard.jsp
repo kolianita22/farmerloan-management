@@ -204,10 +204,9 @@
         <c:choose>
 
     <c:when test="${loan.status == 'Verified'}">
-       <form action="/process-loan/${loan.id}" method="post">
-    <input type="text" name="remark" placeholder="Enter Remark" required>
-    <button class="btn-process">Process</button>
-</form>
+       <a href="/process-loan/${loan.id}" class="btn-process">
+       <button class="btn-process">Process</button>
+       </a>
     </c:when>
 
     <c:otherwise>
