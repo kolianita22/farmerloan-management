@@ -24,7 +24,7 @@ public class AuthController {
     
     @GetMapping("/")
     public String home() {
-        return "API Running";
+        return "home";
     }
     
 
