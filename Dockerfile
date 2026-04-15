@@ -1,11 +1,8 @@
-FROM eclipse-temurin:17-jdk
+# Use Java 17
+FROM eclipse-temurin:17-jdk-alpine
 
-WORKDIR /app
+# Copy jar file
+COPY target/*.jar app.jar
 
-COPY . .
-
-RUN chmod +x mvnw
-
-RUN ./mvnw clean install -DskipTests
-
-CMD ["java", "-jar", "target/Farmerloan-0.0.1-SNAPSHOT.jar"]
+# Run application
+ENTRYPOINT ["java","-jar","/app.jar"]

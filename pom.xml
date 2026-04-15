@@ -89,7 +89,7 @@
     <artifactId>jstl</artifactId>
     <version>1.2</version>
 </dependency>
-		
+		3
 	</dependencies>
 
 	<build>
