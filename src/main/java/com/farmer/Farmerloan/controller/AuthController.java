@@ -33,7 +33,11 @@ public class AuthController {
     public String loginPage() {
         return "login";
     }
-
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "register"; // loads register.jsp
+    }
+  
     @PostMapping("/send-otp")
     public String sendOtp(@RequestParam String name,
                           @RequestParam String mobile,
