@@ -90,7 +90,7 @@
     <!-- Card -->
     <div class="login-card">
 
-        <form action="/send-otp" method="post">
+        <form action="send-otp" method="post">
 
             <div class="mb-3 text-start">
                 <label>Aadhaar Number</label>
