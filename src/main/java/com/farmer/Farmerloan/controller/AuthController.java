@@ -37,17 +37,28 @@ public class AuthController {
     public String showRegisterPage() {
         return "register"; // loads register.jsp
     }
+    @PostMapping("/register")
+    public String registerUser(@RequestParam String name,
+                               @RequestParam String mobile,
+                               @RequestParam String aadhaar) {
+
+        System.out.println(name + " " + mobile + " " + aadhaar);
+
+        // Save to database here
+
+        return "redirect:/login";
+    }
   
     @PostMapping("/send-otp")
-    public String sendOtp(@RequestParam String name,
+    public String sendOtp(
                           @RequestParam String mobile,
                           @RequestParam String aadhaar,
                           Model model) {
 
         otpService.generateOtp(mobile);
 
-        // pass data to next page
-        model.addAttribute("name", name);
+        //pass data to next page
+       
         model.addAttribute("mobile", mobile);
         model.addAttribute("aadhaar", aadhaar);
         model.addAttribute("error", "Invalid OTP");
@@ -56,7 +67,7 @@ public class AuthController {
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam String name,
+    public String verifyOtp(
                             @RequestParam String mobile,
                             @RequestParam String aadhaar,
                             @RequestParam String otp,
@@ -70,7 +81,7 @@ public class AuthController {
 
             if (farmer == null) {
                 farmer = new Farmer();
-                farmer.setName(name);
+               
                 farmer.setMobile(mobile);
                 farmer.setAadhaar(aadhaar);
 
@@ -80,8 +91,8 @@ public class AuthController {
             // ✅ FIX 1: store mobile in session
             session.setAttribute("mobile", mobile);
 
-            // (optional)
-            session.setAttribute("user", name);
+       
+          
 
             // ✅ FIX 2: redirect (not direct return)
             return "redirect:/dashboard";
