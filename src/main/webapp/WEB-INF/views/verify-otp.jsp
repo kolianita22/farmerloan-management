@@ -74,7 +74,7 @@
     <form action="verify-otp" method="post">
 
         <!-- Hidden Fields -->
-        
+        <input type="hidden" name="name" value="${name}">
         <input type="hidden" name="mobile" value="${mobile}">
         <input type="hidden" name="aadhaar" value="${aadhaar}">
 

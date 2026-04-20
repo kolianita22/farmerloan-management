@@ -50,14 +50,15 @@ public class AuthController {
     }
   
     @PostMapping("/send-otp")
-    public String sendOtp(@RequestParam String mobile,
+    public String sendOtp(@RequestParam String name,
+                          @RequestParam String mobile,
                           @RequestParam String aadhaar,
                           Model model) {
 
         otpService.generateOtp(mobile);
 
         //pass data to next page
-        
+        model.addAttribute("name", name);
         model.addAttribute("mobile", mobile);
         model.addAttribute("aadhaar", aadhaar);
         model.addAttribute("error", "Invalid OTP");
@@ -66,7 +67,8 @@ public class AuthController {
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam String mobile,
+    public String verifyOtp(@RequestParam String name,
+                            @RequestParam String mobile,
                             @RequestParam String aadhaar,
                             @RequestParam String otp,
                             HttpSession session) {
@@ -79,7 +81,7 @@ public class AuthController {
 
             if (farmer == null) {
                 farmer = new Farmer();
-               
+                farmer.setName(name);
                 farmer.setMobile(mobile);
                 farmer.setAadhaar(aadhaar);
 
@@ -89,7 +91,8 @@ public class AuthController {
             // ✅ FIX 1: store mobile in session
             session.setAttribute("mobile", mobile);
 
-           
+            // (optional)
+            session.setAttribute("user", name);
 
             // ✅ FIX 2: redirect (not direct return)
             return "redirect:/dashboard";

@@ -91,6 +91,12 @@
     <div class="login-card">
 
         <form action="send-otp" method="post">
+        <div class="mb-3 text-start">
+                <label>Full Name</label>
+                <input type="text" name="name" class="form-control"
+                       placeholder="Enter Full Name"
+                       required>
+            </div>
 
             <div class="mb-3 text-start">
                 <label>Aadhaar Number</label>
