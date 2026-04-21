@@ -1,133 +1,189 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Talathi Dashboard</title>
 
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #eef2f7;
-            margin: 0;
+            background: #f4f6f9;
         }
 
-        .header {
-            background: #1b5e20;
+        /* Navbar */
+        .navbar {
+            background-color: #1b5e20;
+        }
+
+        .navbar-brand {
             color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 22px;
+            font-weight: bold;
         }
 
-        .container {
-            width: 95%;
-            margin: 20px auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .navbar .btn {
             background: white;
+            color: #1b5e20;
         }
 
-        th {
-            background: #2e7d32;
-            color: white;
-            padding: 10px;
+        /* Cards */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        td {
-            padding: 10px;
-            text-align: center;
+        /* Table */
+        .table {
+            background: white;
+            border-radius: 10px;
         }
-
-        tr:hover {
-            background: #f1f8e9;
-        }
-
-        .btn {
-            padding: 5px 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 12px;
-            color: white;
-        }
-
-        .verify { background: green; }
-        .reject { background: red; }
-        .view { background: blue; }
-
-        .approved { color: green; font-weight: bold; }
-        .rejected { color: red; font-weight: bold; }
-        .pending { color: orange; font-weight: bold; }
     </style>
 </head>
 
 <body>
 
-<div class="header">
-    Talathi Verification Dashboard
-</div>
+<!-- 🔹 NAVBAR -->
+<nav class="navbar navbar-expand-lg px-4">
+    <span class="navbar-brand">🌱 Kisan Rin Yojana</span>
 
-<div class="container">
+    <div class="ms-auto">
+        <span class="text-white me-3">Talathi</span>
+        <a href="/logout" class="btn btn-sm">Logout</a>
+    </div>
+</nav>
 
+<div class="container mt-4">
 
-<table border="1">
-<tr>
-    <th>Mobile</th>
-    <th>Crop</th>
-    <th>Amount</th>
-    <th>Season</th>
-    <th>Status</th>
-    <th>Documents</th>
-    <th>Action</th>
-</tr>
+    <!-- 🔹 TITLE -->
+    <h3 class="mb-3">Talathi Dashboard</h3>
+    <p class="text-muted">Verify farmer land records for loan applications</p>
 
-<c:forEach var="loan" items="${loans}">
-<tr>
-    <td>${loan.mobile}</td>
-    <td>${loan.crop}</td>
-    <td>₹ ${loan.amount}</td>
-    <td>${loan.season}</td>
+    <!-- 🔹 STATS -->
+    <div class="row mb-4">
 
-    
-    <!-- ✅ DOCUMENTS -->
-    <td>
-        <a class="btn view" href="/download/aadhaar/${loan.id}">Aadhaar</a><br><br>
-        <a class="btn view" href="/download/land/${loan.id}">7/12</a><br><br>
-        <a class="btn view" href="/view/photo/${loan.id}">Photo</a>
-    </td>
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <h6>Pending Verifications</h6>
+                <h2 class="text-warning">
+                    ${pendingCount}
+                </h2>
+            </div>
+        </div>
 
-    <!-- ✅ ACTION -->
-    <td>
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <h6>Verified Today</h6>
+                <h2 class="text-success">
+                    ${verifiedToday}
+                </h2>
+            </div>
+        </div>
 
-        <!-- Verify -->
-        <a class="btn verify" href="/verify/${loan.id}">Verify</a>
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <h6>Total Processed</h6>
+                <h2>
+                    ${totalProcessed}
+                </h2>
+            </div>
+        </div>
 
-        <br><br>
+    </div>
 
-        <!-- Reject with reason -->
-        <form action="/reject/${loan.id}" method="post">
-            <input type="text" name="reason" placeholder="Reason" required style="width:100px;">
-            <br><br>
-            <button class="btn reject" type="submit">Reject</button>
-        </form>
+    <!-- 🔹 TABLE -->
+    <div class="card p-3">
 
-    </td>
-    <td>
-    <a class="btn view" href="/loan-details/${loan.id}">
-    View Full Form
-</a></td>
+        <h5 class="mb-3">Pending Document Verifications</h5>
 
-</tr>
+        <table class="table table-hover text-center">
 
-</c:forEach>
+            <thead class="table-success">
+            <tr>
+                <th>Mobile</th>
+                <th>Crop</th>
+                <th>Amount</th>
+                <th>Season</th>
+                <th>Status</th>
+                <th>Documents</th>
+                <th>Action</th>
+                <th>Details</th>
+            </tr>
+            </thead>
 
-</table>
+            <tbody>
 
-<c:if test="${empty loans}">
-    <h3 style="text-align:center;">No Pending Loans</h3>
-</c:if>
+            <c:forEach var="loan" items="${loans}">
+                <tr>
+
+                    <td>${loan.mobile}</td>
+                    <td>${loan.crop}</td>
+                    <td>₹ ${loan.amount}</td>
+                    <td>${loan.season}</td>
+
+                    <!-- STATUS -->
+                    <td>
+                        <c:choose>
+                            <c:when test="${loan.status == 'Approved'}">
+                                <span class="badge bg-success">Approved</span>
+                            </c:when>
+                            <c:when test="${loan.status == 'Rejected'}">
+                                <span class="badge bg-danger">Rejected</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+
+                    <!-- DOCUMENTS -->
+                    <td>
+                        <a class="btn btn-outline-primary btn-sm" href="/download/aadhaar/${loan.id}">Aadhaar</a><br><br>
+                        <a class="btn btn-outline-primary btn-sm" href="/download/land/${loan.id}">7/12</a><br><br>
+                        <a class="btn btn-outline-primary btn-sm" href="/view/photo/${loan.id}">Photo</a>
+                    </td>
+
+                    <!-- ACTION -->
+                    <td>
+
+                        <a class="btn btn-success btn-sm" href="/verify/${loan.id}">Verify</a>
+
+                        <br><br>
+
+                        <form action="/reject/${loan.id}" method="post">
+                            <input type="text" name="reason" class="form-control form-control-sm"
+                                   placeholder="Reason" required>
+                            <br>
+                            <button class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+
+                    </td>
+
+                    <!-- DETAILS -->
+                    <td>
+                        <a class="btn btn-info btn-sm" href="/loan-details/${loan.id}">
+                            View
+                        </a>
+                    </td>
+
+                </tr>
+            </c:forEach>
+
+            </tbody>
+
+        </table>
+
+        <!-- EMPTY -->
+        <c:if test="${empty loans}">
+            <div class="text-center p-4">
+                <h5>No Pending Verifications</h5>
+                <p class="text-muted">All documents have been verified</p>
+            </div>
+        </c:if>
+
+    </div>
 
 </div>
 

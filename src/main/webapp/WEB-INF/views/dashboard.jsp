@@ -14,15 +14,15 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: #f4f7fb;
+            background: #f1f5f9;
         }
 
         /* SIDEBAR */
         .sidebar {
-            width: 240px;
+            width: 250px;
             height: 100vh;
             position: fixed;
-            background: linear-gradient(180deg, #0b3d91, #1565c0);
+            background: linear-gradient(180deg, #0f172a, #1e3a8a);
             color: white;
             padding-top: 20px;
         }
@@ -42,57 +42,60 @@
         }
 
         .sidebar a:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             padding-left: 25px;
         }
 
         /* MAIN */
         .main {
-            margin-left: 240px;
+            margin-left: 250px;
             padding: 20px;
         }
 
-        /* TOP NAV */
+        /* TOPBAR */
         .topbar {
             background: white;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
         }
 
         /* CARDS */
         .card-box {
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 15px;
             color: white;
             text-align: center;
-            box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
 
-        .total { background: #1565c0; }
-        .approved { background: #2e7d32; }
-        .pending { background: #f9a825; }
-        .rejected { background: #c62828; }
-
-        .card-box h3 {
-            margin: 0;
-            font-size: 28px;
+        .card-box:hover {
+            transform: translateY(-5px);
         }
+
+        .card-box i {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+         .total { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .approved { background: linear-gradient(135deg, #22c55e, #15803d); }
+        .pending { background: linear-gradient(135deg, #f59e0b, #b45309); }
+        .rejected { background: linear-gradient(135deg, #ef4444, #991b1b); }
 
         /* TABLE */
         .table-box {
             background: white;
             margin-top: 25px;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
         }
 
         th {
-            background: #1565c0;
+            background: #1e3a8a;
             color: white;
         }
 
@@ -101,10 +104,10 @@
             vertical-align: middle;
         }
 
-        /* STATUS COLORS */
-        .approved-text { color: green; font-weight: bold; }
-        .pending-text { color: orange; font-weight: bold; }
-        .rejected-text { color: red; font-weight: bold; }
+        /* STATUS */
+        .badge-approved { background: #22c55e; }
+        .badge-pending { background: #f59e0b; }
+        .badge-rejected { background: #ef4444; }
 
     </style>
 </head>
@@ -113,12 +116,12 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <h4> Loan Portal</h4>
+    <h4>🌾 Loan Portal</h4>
 
     <a href="/dashboard"><i class="bi bi-house"></i> Dashboard</a>
     <a href="/loan"><i class="bi bi-file-earmark-plus"></i> Apply Loan</a>
     <a href="/myLoan?mobile=${mobile}"><i class="bi bi-list"></i> My Loans</a>
-    <a href="/talathi-dashboard"><i class="bi bi-check2-square"></i> Verify Loans</a>
+    <a href="/track-loan"><i class="bi bi-graph-up"></i> Track Loan</a>
 
     <c:if test="${role == 'BANK'}">
         <a href="/bank-dashboard"><i class="bi bi-bank"></i> Bank Panel</a>
@@ -130,24 +133,26 @@
 <!-- MAIN -->
 <div class="main">
 
-    <!-- TOP BAR -->
+    <!-- TOPBAR -->
     <div class="topbar">
         <h5>Welcome, ${user}</h5>
-        <span>Government Loan System</span>
+        <span class="text-muted">Farmer Loan Management System</span>
     </div>
 
     <!-- STATS -->
-    <div class="row mt-4 text-center">
+    <div class="row mt-4">
 
         <div class="col-md-3">
             <div class="card-box total">
-                <h6>Total</h6>
+                <i class="bi bi-collection"></i>
+                <h6>Total Loans</h6>
                 <h3>${total}</h3>
             </div>
         </div>
 
         <div class="col-md-3">
             <div class="card-box approved">
+                <i class="bi bi-check-circle"></i>
                 <h6>Approved</h6>
                 <h3>${approved}</h3>
             </div>
@@ -155,6 +160,7 @@
 
         <div class="col-md-3">
             <div class="card-box pending">
+                <i class="bi bi-hourglass-split"></i>
                 <h6>Pending</h6>
                 <h3>${pending}</h3>
             </div>
@@ -162,6 +168,7 @@
 
         <div class="col-md-3">
             <div class="card-box rejected">
+                <i class="bi bi-x-circle"></i>
                 <h6>Rejected</h6>
                 <h3>${rejected}</h3>
             </div>
@@ -172,38 +179,43 @@
     <!-- TABLE -->
     <div class="table-box">
 
-        <h5 class="mb-3">Loan Applications</h5>
+        <h5 class="mb-3">📄 Loan Applications</h5>
 
-        <table class="table table-bordered">
-            <tr>
-                <th>Mobile</th>
-                <th>Crop</th>
-                <th>Amount</th>
-                <th>Status</th>
-            </tr>
+        <table class="table table-hover">
 
-            <c:forEach var="loan" items="${loans}">
+            <thead>
                 <tr>
-                    <td>${loan.mobile}</td>
-                    <td>${loan.crop}</td>
-                    <td>${loan.amount}</td>
-
-                    <td>
-                        <c:choose>
-                            <c:when test="${loan.status == 'Approved'}">
-                                <span class="approved-text">Approved</span>
-                            </c:when>
-                            <c:when test="${loan.status == 'Rejected'}">
-                                <span class="rejected-text">Rejected</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="pending-text">Pending</span>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-
+                    <th>Mobile</th>
+                    <th>Crop</th>
+                    <th>Amount</th>
+                    <th>Status</th>
                 </tr>
-            </c:forEach>
+            </thead>
+
+            <tbody>
+                <c:forEach var="loan" items="${loans}">
+                    <tr>
+                        <td>${loan.mobile}</td>
+                        <td>${loan.crop}</td>
+                        <td>₹ ${loan.amount}</td>
+
+                        <td>
+                            <c:choose>
+                                <c:when test="${loan.status == 'Approved'}">
+                                    <span class="badge badge-approved">Approved</span>
+                                </c:when>
+                                <c:when test="${loan.status == 'Rejected'}">
+                                    <span class="badge badge-rejected">Rejected</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge badge-pending">Pending</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+
         </table>
 
     </div>

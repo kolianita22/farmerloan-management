@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,6 +39,12 @@
 
         .sidebar a:hover {
             background: #1565c0;
+        }
+        .topbar {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
         /* MAIN */
@@ -120,10 +125,13 @@
 
 <!-- MAIN -->
 <div class="main">
-
-    <div class="header">
-        Welcome Bank Officer 👋
+      <!-- 🔹 TOPBAR -->
+    <div class="topbar d-flex justify-content-between">
+        <div><b>Kisan Rin Yojana</b></div>
+        <div>Bank Officer | <a href="/logout">Logout</a></div>
     </div>
+
+    
 
     <!-- 🔥 STATS -->
     <div class="row mb-4">
