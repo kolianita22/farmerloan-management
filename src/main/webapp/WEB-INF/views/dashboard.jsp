@@ -135,9 +135,47 @@
 
     <!-- TOPBAR -->
     <div class="topbar">
-        <h5>Welcome, ${user}</h5>
-        <span class="text-muted">Farmer Loan Management System</span>
+
+    <h5>Welcome, ${user}</h5>
+
+    <div class="d-flex align-items-center">
+
+        <!-- 🔔 Notification Bell -->
+        <div class="dropdown me-3">
+            <button class="btn btn-light position-relative" data-bs-toggle="dropdown">
+                <i class="bi bi-bell"></i>
+
+                <!-- 🔴 Count -->
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    ${unreadCount}
+                </span>
+            </button>
+
+            <!-- 🔽 Dropdown -->
+            <ul class="dropdown-menu dropdown-menu-end" style="width:300px;">
+
+                <li class="dropdown-header">Notifications</li>
+
+                <c:forEach var="n" items="${notifications}">
+                    <li>
+                        <a class="dropdown-item">
+                            ${n.message}
+                            <br>
+                            <small class="text-muted">${n.createdAt}</small>
+                        </a>
+                    </li>
+                </c:forEach>
+
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-center" href="#">View All</a></li>
+
+            </ul>
+        </div>
+
+        <span class="text-muted">Loan System</span>
+
     </div>
+</div>
 
     <!-- STATS -->
     <div class="row mt-4">
@@ -219,6 +257,7 @@
         </table>
 
     </div>
+    
 
 </div>
 

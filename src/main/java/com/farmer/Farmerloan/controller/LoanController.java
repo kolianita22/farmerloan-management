@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.farmer.Farmerloan.model.Loan;
 import com.farmer.Farmerloan.services.LoanService;
+import com.farmer.Farmerloan.services.NotificationService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +24,7 @@ public class LoanController {
     private LoanService loanService;
 	
     
-  
+    private NotificationService notificationService;
   
     
     @GetMapping("/track-loan")
@@ -122,6 +123,7 @@ public class LoanController {
         long approvedCount = loans.stream()
                 .filter(l -> "Approved".equalsIgnoreCase(l.getStatus()))
                 .count();
+       
 
         long pendingCount = loans.stream()
                 .filter(l -> "Pending".equalsIgnoreCase(l.getStatus()))

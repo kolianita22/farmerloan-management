@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.farmer.Farmerloan.model.Farmer;
 import com.farmer.Farmerloan.services.FarmerService;
+import com.farmer.Farmerloan.services.NotificationService;
 import com.farmer.Farmerloan.services.Otpservice;
 
 
@@ -22,6 +23,7 @@ public class AuthController {
     @Autowired
     private Otpservice otpService;
     
+    private NotificationService notificationService;
     @GetMapping("/")
     public String home() {
         return "home";
@@ -100,5 +102,14 @@ public class AuthController {
         
         return "verify-otp";
     }
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+
+        model.addAttribute("notifications", notificationService.getLatest());
+        model.addAttribute("unreadCount", notificationService.getUnreadCount());
+
+        return "dashboard";
+    }
+    
 
 }
