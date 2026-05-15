@@ -61,38 +61,7 @@
     <h3 class="mb-3">Talathi Dashboard</h3>
     <p class="text-muted">Verify farmer land records for loan applications</p>
 
-    <!-- 🔹 STATS -->
-    <div class="row mb-4">
-
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h6>Pending Verifications</h6>
-                <h2 class="text-warning">
-                    ${pendingCount}
-                </h2>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h6>Verified Today</h6>
-                <h2 class="text-success">
-                    ${verifiedToday}
-                </h2>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h6>Total Processed</h6>
-                <h2>
-                    ${totalProcessed}
-                </h2>
-            </div>
-        </div>
-
-    </div>
-
+    
     <!-- 🔹 TABLE -->
     <div class="card p-3">
 

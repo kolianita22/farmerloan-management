@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.farmer.Farmerloan.model.Loan;
 import com.farmer.Farmerloan.repository.LoanRepository;
 import com.farmer.Farmerloan.services.LoanService;
+import com.farmer.Farmerloan.services.NotificationService;
 import com.farmer.Farmerloan.services.TalathiService;
 
 @Controller
@@ -21,7 +22,8 @@ public class TalathiController {
 	@Autowired
     private TalathiService talathiService;
 	@Autowired
-    private LoanRepository loanRepository;  
+    private LoanRepository loanRepository; 
+	 private NotificationService notificationService;
 	
 	
 	@GetMapping("/loan-details/{id}")
@@ -39,6 +41,7 @@ public class TalathiController {
 
         List<Loan> loans = talathiService.getPendingLoans();
         model.addAttribute("loans", loans);
+        
 
         return "talathi-dashboard";
     }
@@ -47,7 +50,25 @@ public class TalathiController {
     @GetMapping("/verify/{id}")
     public String verify(@PathVariable int id) {
 
-        talathiService.verifyLoan(id);
+         talathiService.verifyLoan(id);
+       
+
+	     model.addAttribute("loans", loans);
+
+	     model.addAttribute("total", loans.size());
+	     model.addAttribute("approved", loans.stream().filter(l -> "Approved".equals(l.getStatus())).count());
+	     model.addAttribute("pending", loans.stream().filter(l -> "Pending".equals(l.getStatus())).count());
+	     model.addAttribute("rejected", loans.stream().filter(l -> "Rejected".equals(l.getStatus())).count());
+
+
+            
+
+            notificationService.addNotification(
+                    "Land Record Verified",
+                    "SUCCESS"
+            ); 
+
+        
 
         return "redirect:/talathi-dashboard";
     }

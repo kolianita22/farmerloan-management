@@ -16,7 +16,7 @@ public class BankService {
 
 	    public List<Loan> getVerifiedLoans() {
 	    	return loanRepository.findByStatusIn(
-	    	        List.of("Verified", "Approved", "Rejected")
+	    	        List.of("Verified", "Approved", "Rejected","Pending")
 	    	    );
 	    }
 	    public List<Loan> getAllLoansForBank() {
