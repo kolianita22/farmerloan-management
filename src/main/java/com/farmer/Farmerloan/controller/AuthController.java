@@ -102,14 +102,6 @@ public class AuthController {
         
         return "verify-otp";
     }
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-
-        model.addAttribute("notifications", notificationService.getLatest());
-        model.addAttribute("unreadCount", notificationService.getUnreadCount());
-
-        return "dashboard";
-    }
     
 
 }
