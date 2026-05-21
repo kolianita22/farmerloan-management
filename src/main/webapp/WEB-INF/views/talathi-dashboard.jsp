@@ -89,7 +89,7 @@
 
                     <td>${loan.mobile}</td>
                     <td>${loan.crop}</td>
-                    <td>₹ ${loan.amount}</td>
+                    <td>₹${loan.amount}</td>
                     <td>${loan.season}</td>
 
                     <!-- STATUS -->

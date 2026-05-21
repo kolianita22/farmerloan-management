@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.farmer.Farmerloan.model.Loan;
 import com.farmer.Farmerloan.repository.LoanRepository;
-import com.farmer.Farmerloan.services.LoanService;
+
 import com.farmer.Farmerloan.services.NotificationService;
 import com.farmer.Farmerloan.services.TalathiService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TalathiController {
@@ -24,6 +26,29 @@ public class TalathiController {
 	@Autowired
     private LoanRepository loanRepository; 
 	 private NotificationService notificationService;
+	 
+	 @GetMapping("/talathi")
+	 public String talathiLoginPage() {
+	     return "talathi-login";
+	 }
+	 @PostMapping("/talathiLogin")
+	 public String login(@RequestParam String username,
+	                     @RequestParam String password,
+	                     HttpSession session,
+	                     Model model) {
+
+	     if(username.equals("talathi") &&
+	        password.equals("1234")) {
+
+	         session.setAttribute("talathi", username);
+
+	         return "redirect:/talathi/dashboard";
+	     }
+
+	     model.addAttribute("error", "Invalid Username or Password");
+
+	     return "talathi-login";
+	 }
 	
 	
 	@GetMapping("/loan-details/{id}")
@@ -52,17 +77,6 @@ public class TalathiController {
 
          talathiService.verifyLoan(id);
        
-
-	     model.addAttribute("loans", loans);
-
-	     model.addAttribute("total", loans.size());
-	     model.addAttribute("approved", loans.stream().filter(l -> "Approved".equals(l.getStatus())).count());
-	     model.addAttribute("pending", loans.stream().filter(l -> "Pending".equals(l.getStatus())).count());
-	     model.addAttribute("rejected", loans.stream().filter(l -> "Rejected".equals(l.getStatus())).count());
-
-
-            
-
             notificationService.addNotification(
                     "Land Record Verified",
                     "SUCCESS"

@@ -96,6 +96,17 @@
 <div class="footer">
     © 2026 Government of India | Secure Login
 </div>
+<script>
+window.history.forward();
+
+function noBack() {
+    window.history.forward();
+}
+
+setTimeout("noBack()", 0);
+
+window.onunload = function () { null };
+</script>
 
 </body>
 </html>
