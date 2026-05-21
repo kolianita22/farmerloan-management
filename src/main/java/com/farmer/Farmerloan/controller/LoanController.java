@@ -24,7 +24,6 @@ public class LoanController {
     private LoanService loanService;
 	
     
-    private NotificationService notificationService;
   
     
     @GetMapping("/track-loan")
@@ -116,7 +115,7 @@ public class LoanController {
 
     
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model,HttpSession session) {
 
         List<Loan> loans = loanService.getAllLoans();
 
@@ -138,6 +137,11 @@ public class LoanController {
         model.addAttribute("approved", approvedCount);
         model.addAttribute("pending", pendingCount);
         model.addAttribute("rejected", rejectedCount);
+        
+        if(session.getAttribute("farmer") == null) {
+            return "redirect:/login";
+        }
+
 
         return "dashboard";
     }
@@ -230,7 +234,8 @@ public class LoanController {
         fis.close();
         os.flush();
     }
-  
+    
+ 
     //  Logout
     @GetMapping("/logout")
     public String logout(HttpSession session) {

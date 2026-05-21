@@ -103,15 +103,10 @@ public class AuthController {
         
         return "verify-otp";
     }
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
-
-        if(session.getAttribute("farmer") == null) {
-            return "redirect:/login";
-        }
-
-        return "dashboard";
-    }
+   
+  
+    
+    
     
 
 }
