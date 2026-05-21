@@ -23,7 +23,8 @@ public class AuthController {
     @Autowired
     private Otpservice otpService;
     
-    private NotificationService notificationService;
+   
+    
     @GetMapping("/")
     public String home() {
         return "home";
