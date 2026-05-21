@@ -230,16 +230,7 @@ public class LoanController {
         fis.close();
         os.flush();
     }
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
-
-        if(session.getAttribute("farmer") == null) {
-            return "redirect:/login";
-        }
-
-        return "dashboard";
-    }
-   
+  
     //  Logout
     @GetMapping("/logout")
     public String logout(HttpSession session) {
