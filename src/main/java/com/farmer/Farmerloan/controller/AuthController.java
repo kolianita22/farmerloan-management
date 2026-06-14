@@ -70,11 +70,13 @@ public class AuthController {
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam String name,
-                            @RequestParam String mobile,
-                            @RequestParam String aadhaar,
-                            @RequestParam String otp,
-                            HttpSession session) {
+    public String verifyOtp(
+            @RequestParam String otp,
+            @RequestParam String name,
+            @RequestParam String mobile,
+            @RequestParam String aadhaar,
+            HttpSession session,
+            Model model) {
 
         boolean isValid = otpService.verify(mobile, otp);
 
@@ -91,16 +93,17 @@ public class AuthController {
                 farmerService.saveFarmer(farmer);
             }
 
-            // ✅ FIX 1: store mobile in session
             session.setAttribute("mobile", mobile);
-
-            // (optional)
             session.setAttribute("user", name);
 
-            // ✅ FIX 2: redirect (not direct return)
             return "redirect:/dashboard";
         }
-        
+
+        model.addAttribute("error", "Invalid OTP");
+        model.addAttribute("name", name);
+        model.addAttribute("mobile", mobile);
+        model.addAttribute("aadhaar", aadhaar);
+
         return "verify-otp";
     }
    
