@@ -1,85 +1,80 @@
 package com.farmer.Farmerloan.services;
 
-/*import java.io.BufferedReader;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;*/
-import java.util.*;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Otpservice {
 
-    Map<String, String> otpMap = new HashMap<>();
+    private final Map<String, String> otpMap = new HashMap<>();
+
+    @Value("${sms.api.key:}")
+    private String apiKey;
 
     public String generateOtp(String mobile) {
-        String otp = "" + (int)(Math.random()*900000 + 100000);
-
+        String otp = String.format("%06d", (int)(Math.random() * 900000 + 100000));
         otpMap.put(mobile, otp);
 
-        // ✅ TEMP SOLUTION
-        System.out.println("Generated OTP: " + otp);
+        System.out.println("==========================================");
+        System.out.println("  OTP Generated for " + mobile + ": " + otp);
+        System.out.println("==========================================");
+
+        // Send real SMS if SMS API key is configured
+        if (apiKey != null && !apiKey.trim().isEmpty()) {
+            sendSms(mobile, otp);
+        }
 
         return otp;
-
-        /*System.out.println("Generated OTP: " + otp); // 🔥 fallback (IMPORTANT)
-
-        sendSms(mobile, otp); // try sending SMS
-
-        return otp;*/
     }
 
     public boolean verify(String mobile, String otp) {
-        return otp.equals(otpMap.get(mobile));
+        if (mobile == null || otp == null) return false;
+        String storedOtp = otpMap.get(mobile);
+        if (otp.trim().equals(storedOtp)) {
+            otpMap.remove(mobile); // One-time use verification
+            return true;
+        }
+        return false;
     }
-    /*private void sendSms(String mobile, String otp) {
 
+    public void sendSms(String mobile, String otp) {
         try {
-            String apiKey = "rNWK8VX0SDJMcHa4QRmPBbdY6Ixn1kfgyptE5vje2U3zuwlOF9RptHWQ3FNgzDO5IViTarn40Myf2b9l"; // 🔴 replace
+            String message = URLEncoder.encode("Kisan Rin Yojana: Your OTP for login is " + otp + ". Do not share it with anyone.", StandardCharsets.UTF_8);
+            String urlStr = "https://www.fast2sms.com/dev/bulkV2?authorization=" + apiKey.trim() +
+                            "&route=q&message=" + message +
+                            "&language=english&flash=0&numbers=" + mobile.trim();
 
-            String message = "Your OTP is " + otp;
-
-            String url = "https://www.fast2sms.com/dev/bulkV2";
-
-            URL obj = new URL(url);
+            URL obj = new URL(urlStr);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);
 
-            con.setRequestMethod("POST");
-
-            con.setRequestProperty("authorization", apiKey);
-            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            con.setDoOutput(true);
-
-            String postData = "route=q&message=" + message +
-                    "&language=english&flash=0&numbers=" + mobile;
-
-            con.getOutputStream().write(postData.getBytes());
-
-            // ✅ Step 1: Get response code
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
+            System.out.println("SMS API Response Code: " + responseCode);
 
-            // ✅ Step 2: Read API response (ADD THIS HERE)
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getErrorStream()));
-
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    responseCode >= 400 ? con.getErrorStream() : con.getInputStream()));
+            StringBuilder response = new StringBuilder();
             String inputLine;
-            StringBuffer response = new StringBuffer();
-
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
-
             in.close();
-
-            // ✅ Step 3: Print response
-            System.out.println("API Response: " + response.toString());
+            System.out.println("SMS API Response Body: " + response.toString());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Failed to send SMS to " + mobile + ": " + e.getMessage());
         }
-    }*/
+    }
 }

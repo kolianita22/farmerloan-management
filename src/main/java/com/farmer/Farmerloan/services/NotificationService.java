@@ -29,4 +29,11 @@ public class NotificationService {
         return repo.countByIsReadFalse();
     }
 
+    public void markAllAsRead() {
+        List<Notification> list = repo.findAll();
+        for (Notification n : list) {
+            n.setRead(true);
+        }
+        repo.saveAll(list);
+    }
 }

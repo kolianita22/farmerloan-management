@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.farmer.Farmerloan.model.Loan;
+import com.farmer.Farmerloan.repository.LoanRepository;
 import com.farmer.Farmerloan.services.BankService;
+import com.farmer.Farmerloan.services.NotificationService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -20,6 +22,10 @@ public class BankController {
 
     @Autowired
     private BankService bankService;
+    @Autowired
+    private LoanRepository loanRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/bank-login")
     public String bankLoginPage() {
@@ -56,6 +62,8 @@ public class BankController {
         model.addAttribute("approved", loans.stream().filter(l -> "Approved".equals(l.getStatus())).count());
         model.addAttribute("pending", loans.stream().filter(l -> "Pending".equals(l.getStatus())).count());
         model.addAttribute("rejected", loans.stream().filter(l -> "Rejected".equals(l.getStatus())).count());
+        model.addAttribute("notifications", notificationService.getLatest());
+        model.addAttribute("unreadCount", notificationService.getUnreadCount());
 
         return "bank-dashboard";
     }
@@ -68,6 +76,15 @@ public class BankController {
         }
 
         bankService.processLoan(id);
+
+        Loan loan = loanRepository.findById(id).orElse(null);
+        if (loan != null) {
+            if ("Approved".equalsIgnoreCase(loan.getStatus())) {
+                notificationService.addNotification("Loan #" + id + " Approved & Sanctioned by Bank (₹" + loan.getEligibleAmount() + ")", "SUCCESS");
+            } else {
+                notificationService.addNotification("Loan #" + id + " Declined by Bank", "DANGER");
+            }
+        }
 
         return "redirect:/bank-dashboard";
     }

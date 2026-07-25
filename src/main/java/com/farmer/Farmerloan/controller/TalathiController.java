@@ -61,6 +61,8 @@ public class TalathiController {
 
 		    List<Loan> loans = talathiService.getPendingLoans();
 		    model.addAttribute("loans", loans);
+		    model.addAttribute("notifications", notificationService.getLatest());
+		    model.addAttribute("unreadCount", notificationService.getUnreadCount());
 
 		    return "talathi-dashboard";
 		}
@@ -90,7 +92,7 @@ public class TalathiController {
         talathiService.verifyLoan(id);
        
         notificationService.addNotification(
-                "Land Record Verified",
+                "Land Record Verified for loan #" + id,
                 "SUCCESS"
         ); 
 
@@ -106,6 +108,10 @@ public class TalathiController {
         }
 
         talathiService.rejectLoan(id, reason);
+        notificationService.addNotification(
+                "Land Record Verification Rejected for loan #" + id + ": " + reason,
+                "DANGER"
+        );
         return "redirect:/talathi-dashboard";
     }
 }

@@ -21,7 +21,9 @@ import jakarta.servlet.http.HttpSession;
 public class LoanController {
 
     @Autowired
-    private LoanService loanService; 
+    private LoanService loanService;
+    @Autowired
+    private NotificationService notificationService; 
     @GetMapping("/track-loan")
     public String trackPage() {
         return "track-loan";
@@ -107,6 +109,11 @@ public class LoanController {
 
         loanService.saveLoan(loan);
 
+        notificationService.addNotification(
+            "New crop loan application submitted for " + crop + " (₹" + amount + ")",
+            "INFO"
+        );
+
         return "redirect:/dashboard";
     }
 
@@ -137,8 +144,8 @@ public class LoanController {
         model.addAttribute("approved", approvedCount);
         model.addAttribute("pending", pendingCount);
         model.addAttribute("rejected", rejectedCount);
-        
-        
+        model.addAttribute("notifications", notificationService.getLatest());
+        model.addAttribute("unreadCount", notificationService.getUnreadCount());
 
         return "dashboard";
     }

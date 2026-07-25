@@ -62,12 +62,13 @@ public class AuthController {
                           @RequestParam String aadhaar,
                           Model model) {
 
-        otpService.generateOtp(mobile);
+        String generatedOtp = otpService.generateOtp(mobile);
 
         //pass data to next page
         model.addAttribute("name", name);
         model.addAttribute("mobile", mobile);
         model.addAttribute("aadhaar", aadhaar);
+        model.addAttribute("otpHint", generatedOtp);
 
         return "verify-otp";
     }

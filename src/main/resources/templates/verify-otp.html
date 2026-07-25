@@ -50,6 +50,10 @@
                     <div th:text="${error}">Invalid OTP entered</div>
                 </div>
 
+                <div th:if="${otpHint != null}" class="alert alert-info border-info text-center small mb-3">
+                    <i class="bi bi-phone-vibrate-fill me-1 text-primary"></i> OTP sent to <strong th:text="${mobile}">mobile</strong>: <span class="badge bg-primary fs-6 ms-1" th:text="${otpHint}">123456</span>
+                </div>
+
                 <form th:action="@{/verify-otp}" method="post">
                     <!-- Hidden Fields -->
                     <input type="hidden" name="name" th:value="${name}">
