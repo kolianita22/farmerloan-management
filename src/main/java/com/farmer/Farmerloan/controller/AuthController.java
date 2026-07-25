@@ -25,7 +25,7 @@ public class AuthController {
     
    
     
-    @GetMapping("/")
+    @GetMapping({"/", "/home"})
     public String home() {
         return "home";
     }
