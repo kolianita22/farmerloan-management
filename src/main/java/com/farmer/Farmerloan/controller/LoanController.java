@@ -21,11 +21,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoanController {
 
     @Autowired
-    private LoanService loanService;
-	
-    
-  
-    
+    private LoanService loanService; 
     @GetMapping("/track-loan")
     public String trackPage() {
         return "track-loan";
@@ -107,17 +103,21 @@ public class LoanController {
         loan.setAadhaarPath(aadhaarName);
         loan.setLandDocPath(landName);
         loan.setBankPath(bankName);
+        
 
         loanService.saveLoan(loan);
 
         return "redirect:/dashboard";
     }
 
-    
     @GetMapping("/dashboard")
     public String dashboard(Model model,HttpSession session) {
 
+    	 if(session.getAttribute("mobile") == null) {
+             return "redirect:/login";
+         }
         List<Loan> loans = loanService.getAllLoans();
+       
 
         long approvedCount = loans.stream()
                 .filter(l -> "Approved".equalsIgnoreCase(l.getStatus()))
@@ -138,17 +138,14 @@ public class LoanController {
         model.addAttribute("pending", pendingCount);
         model.addAttribute("rejected", rejectedCount);
         
-        if(session.getAttribute("farmer") == null) {
-            return "redirect:/login";
-        }
-
+        
 
         return "dashboard";
     }
     // Download File (SAFE)
     @GetMapping("/download/{type}/{id}")
     public void downloadFile(@PathVariable String type,
-                             @PathVariable int id,
+                             @PathVariable Long id,
                              HttpServletResponse response) throws IOException {
 
         Loan loan = loanService.getLoanById(id);
@@ -176,9 +173,15 @@ public class LoanController {
                 return;
         }
 
-        File file = new File(uploadDir + fileName);
+        if (fileName == null || fileName.trim().isEmpty()) {
+            response.getWriter().write("File not found");
+            return;
+        }
 
-        if (!file.exists()) {
+        File baseDir = new File(uploadDir);
+        File file = new File(baseDir, fileName);
+
+        if (!file.exists() || !file.getCanonicalPath().startsWith(baseDir.getCanonicalPath())) {
             response.getWriter().write("File not found");
             return;
         }
@@ -202,19 +205,20 @@ public class LoanController {
 
     // View Photo
     @GetMapping("/view/photo/{id}")
-    public void viewPhoto(@PathVariable int id, HttpServletResponse response) throws IOException {
+    public void viewPhoto(@PathVariable Long id, HttpServletResponse response) throws IOException {
 
         Loan loan = loanService.getLoanById(id);
 
-        if (loan == null) {
+        if (loan == null || loan.getBankPath() == null) {
             response.getWriter().write("Not found");
             return;
         }
 
         String uploadDir = System.getProperty("user.dir") + "/uploads/";
-        File file = new File(uploadDir + loan.getBankPath());
+        File baseDir = new File(uploadDir);
+        File file = new File(baseDir, loan.getBankPath());
 
-        if (!file.exists()) {
+        if (!file.exists() || !file.getCanonicalPath().startsWith(baseDir.getCanonicalPath())) {
             response.getWriter().write("Image not found");
             return;
         }

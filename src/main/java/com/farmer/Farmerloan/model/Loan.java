@@ -36,6 +36,8 @@ public class Loan {
     private int creditScore;
     private double eligibleAmount;
     private boolean bankApproved;
+    
+    
     public double getIncome() {
 		return income;
 	}

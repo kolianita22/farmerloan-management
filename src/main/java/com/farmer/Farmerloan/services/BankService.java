@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.farmer.Farmerloan.model.Loan;
 import com.farmer.Farmerloan.repository.LoanRepository;
 
@@ -54,9 +57,10 @@ public class BankService {
 	        return score;
 	    }
 
-	    public void processLoan(int id) {
+	    public void processLoan(Long id) {
 
-	        Loan loan = loanRepository.findById(id).get();
+	        Loan loan = loanRepository.findById(id)
+	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Loan not found"));
 
 	        // AUTO CREDIT SCORE
 	        int creditScore = calculateCreditScore(loan);

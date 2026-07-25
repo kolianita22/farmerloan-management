@@ -94,10 +94,10 @@ body{
 
 <div class="login-card">
 
+    <!-- Logo -->
     <div class="logo">
-        <img src="https://cdn-icons-png.flaticon.com/512/2909/2909763.png">
+        🌱 Kisan Rin
     </div>
-
     <div class="title">
         Talathi Login
     </div>
@@ -109,7 +109,7 @@ body{
         </div>
     <% } %>
 
-    <form action="talathiLogin" method="post">
+    <form action="/talathiLogin" method="post">
 
         <!-- Username -->
         <div class="mb-3">

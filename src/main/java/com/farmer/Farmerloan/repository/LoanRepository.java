@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.farmer.Farmerloan.model.Loan;
 
-public interface LoanRepository extends JpaRepository<Loan,Integer>{
+public interface LoanRepository extends JpaRepository<Loan, Long>{
 
 	List<Loan> findByMobile(String mobile);
 
@@ -16,6 +16,7 @@ public interface LoanRepository extends JpaRepository<Loan,Integer>{
 
 
 	List<Loan> findByStatusIn(List<String> of);
+	
 
 
 	

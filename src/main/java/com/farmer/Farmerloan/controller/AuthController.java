@@ -29,7 +29,6 @@ public class AuthController {
     public String home() {
         return "home";
     }
-    
 
     // 1. Open Login Page
     @GetMapping("/login")
@@ -45,9 +44,14 @@ public class AuthController {
                                @RequestParam String mobile,
                                @RequestParam String aadhaar) {
 
-        System.out.println(name + " " + mobile + " " + aadhaar);
-
-        // Save to database here
+        Farmer farmer = farmerService.findByMobile(mobile);
+        if (farmer == null) {
+            farmer = new Farmer();
+            farmer.setName(name);
+            farmer.setMobile(mobile);
+            farmer.setAadhaar(aadhaar);
+            farmerService.saveFarmer(farmer);
+        }
 
         return "redirect:/login";
     }
@@ -64,19 +68,17 @@ public class AuthController {
         model.addAttribute("name", name);
         model.addAttribute("mobile", mobile);
         model.addAttribute("aadhaar", aadhaar);
-        model.addAttribute("error", "Invalid OTP");
 
         return "verify-otp";
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(
-            @RequestParam String otp,
-            @RequestParam String name,
-            @RequestParam String mobile,
-            @RequestParam String aadhaar,
-            HttpSession session,
-            Model model) {
+    public String verifyOtp(@RequestParam String name,
+                            @RequestParam String mobile,
+                            @RequestParam String aadhaar,
+                            @RequestParam String otp,
+                            HttpSession session,
+                            Model model) {
 
         boolean isValid = otpService.verify(mobile, otp);
 
@@ -98,18 +100,16 @@ public class AuthController {
 
             return "redirect:/dashboard";
         }
-
-        model.addAttribute("error", "Invalid OTP");
+        
         model.addAttribute("name", name);
         model.addAttribute("mobile", mobile);
         model.addAttribute("aadhaar", aadhaar);
-
+        model.addAttribute("error", "Invalid OTP");
         return "verify-otp";
     }
-   
-  
-    
-    
-    
 
+    @PostMapping("/submit-feedback")
+    public String submitFeedback(@RequestParam String feedback) {
+        return "redirect:/?feedbackSubmitted=true";
+    }
 }

@@ -71,7 +71,7 @@
 
     <h2 class="text-center mb-4">Verify OTP</h2>
 
-    <form action="verify-otp" method="post">
+    <form action="/verify-otp" method="post">
 
         <!-- Hidden Fields -->
         <input type="hidden" name="name" value="${name}">
@@ -96,17 +96,5 @@
 <div class="footer">
     © 2026 Government of India | Secure Login
 </div>
-<script>
-window.history.forward();
-
-function noBack() {
-    window.history.forward();
-}
-
-setTimeout("noBack()", 0);
-
-window.onunload = function () { null };
-</script>
-
 </body>
 </html>

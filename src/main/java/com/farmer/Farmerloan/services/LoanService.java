@@ -22,7 +22,7 @@ public class LoanService {
 	        return loanRepository.findByMobile(mobile);
 	    }
 
-	    public Loan getLoanById(int id) {
+	    public Loan getLoanById(Long id) {
 	        return loanRepository.findById(id).orElse(null);
 	    }
 	    public List<Loan> getAllLoans() {

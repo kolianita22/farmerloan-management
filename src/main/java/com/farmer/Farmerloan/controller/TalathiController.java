@@ -25,34 +25,52 @@ public class TalathiController {
     private TalathiService talathiService;
 	@Autowired
     private LoanRepository loanRepository; 
+	@Autowired
 	 private NotificationService notificationService;
 	 
-	 @GetMapping("/talathi")
+	 @GetMapping("/talathi-login")
 	 public String talathiLoginPage() {
 	     return "talathi-login";
 	 }
-	 @PostMapping("/talathiLogin")
-	 public String login(@RequestParam String username,
-	                     @RequestParam String password,
-	                     HttpSession session,
-	                     Model model) {
 
-	     if(username.equals("talathi") &&
-	        password.equals("1234")) {
+	 @PostMapping("/talathiLogin")
+	 public String login(
+	         @RequestParam String username,
+	         @RequestParam String password,
+	         HttpSession session,
+	         Model model) {
+
+	     if("talathi".equals(username) &&
+	        "1234".equals(password)) {
 
 	         session.setAttribute("talathi", username);
 
-	         return "redirect:/talathi/dashboard";
+	         return "redirect:/talathi-dashboard";
 	     }
 
 	     model.addAttribute("error", "Invalid Username or Password");
 
 	     return "talathi-login";
 	 }
-	
-	
+	 @GetMapping("/talathi-dashboard")
+		public String dashboard(Model model, HttpSession session) {
+
+		    if(session.getAttribute("talathi") == null) {
+		        return "redirect:/talathi-login";
+		    }
+
+		    List<Loan> loans = talathiService.getPendingLoans();
+		    model.addAttribute("loans", loans);
+
+		    return "talathi-dashboard";
+		}
+
 	@GetMapping("/loan-details/{id}")
-	public String loanDetails(@PathVariable int id, Model model) {
+	public String loanDetails(@PathVariable Long id, Model model, HttpSession session) {
+
+	    if (session.getAttribute("talathi") == null) {
+	        return "redirect:/talathi-login";
+	    }
 
 	    Loan loan = loanRepository.findById(id).orElse(null);
 
@@ -61,44 +79,33 @@ public class TalathiController {
 	    return "loan-details";   // JSP file name
 	}
     
-    @GetMapping("/talathi-dashboard")
-    public String dashboard(Model model) {
-
-        List<Loan> loans = talathiService.getPendingLoans();
-        model.addAttribute("loans", loans);
-        
-
-        return "talathi-dashboard";
-    }
-
     // Verify
     @GetMapping("/verify/{id}")
-    public String verify(@PathVariable int id) {
+    public String verify(@PathVariable Long id, HttpSession session) {
 
-         talathiService.verifyLoan(id);
+        if (session.getAttribute("talathi") == null) {
+            return "redirect:/talathi-login";
+        }
+
+        talathiService.verifyLoan(id);
        
-            notificationService.addNotification(
-                    "Land Record Verified",
-                    "SUCCESS"
-            ); 
-
-        
+        notificationService.addNotification(
+                "Land Record Verified",
+                "SUCCESS"
+        ); 
 
         return "redirect:/talathi-dashboard";
     }
 
     // Reject
-    @GetMapping("/reject/{id}")
-    public String reject(@PathVariable int id) {
-
-        talathiService.rejectLoan(id, "Invalid Documents");
-
-        return "redirect:/talathi-dashboard";
-    }
     @PostMapping("/reject/{id}")
-    public String reject(@PathVariable int id, @RequestParam String reason) {
+    public String reject(@PathVariable Long id, @RequestParam String reason, HttpSession session) {
+
+        if (session.getAttribute("talathi") == null) {
+            return "redirect:/talathi-login";
+        }
+
         talathiService.rejectLoan(id, reason);
         return "redirect:/talathi-dashboard";
     }
-    
 }
