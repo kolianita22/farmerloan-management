@@ -1,0 +1,342 @@
+/* ==========================================================================
+   Government of India e-Governance Portal Design System
+   Kisan Rin Yojana - Farmer Crop Loan Management System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --gov-blue: #0b5ed7;
+  --gov-blue-dark: #084298;
+  --gov-blue-light: #e7f1ff;
+  --gov-saffron: #ff9933;
+  --gov-green: #138808;
+  --gov-green-light: #e8f5e9;
+  --gov-bg: #f5f7fa;
+  --gov-card-bg: #ffffff;
+  --gov-text-dark: #212529;
+  --gov-text-muted: #6c757d;
+  --gov-border-color: #dee2e6;
+  --gov-radius: 8px;
+  --gov-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --gov-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --gov-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--gov-bg);
+  color: var(--gov-text-dark);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   1. Indian Tricolour Top Accent Strip & Utility Header
+   -------------------------------------------------------------------------- */
+.gov-tricolor-strip {
+  height: 4px;
+  background: linear-gradient(90deg, #ff9933 0%, #ff9933 33.33%, #ffffff 33.33%, #ffffff 66.66%, #138808 66.66%, #138808 100%);
+  width: 100%;
+}
+
+.gov-utility-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--gov-border-color);
+  font-size: 0.825rem;
+  padding: 6px 0;
+  color: var(--gov-text-muted);
+}
+
+.gov-utility-header a {
+  color: var(--gov-text-dark);
+  text-decoration: none;
+}
+
+.gov-utility-header a:hover {
+  text-decoration: underline;
+  color: var(--gov-blue);
+}
+
+/* --------------------------------------------------------------------------
+   2. Main Government Header & Branding Logo
+   -------------------------------------------------------------------------- */
+.gov-main-header {
+  background-color: #ffffff;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gov-border-color);
+  box-shadow: var(--gov-shadow-sm);
+}
+
+.gov-emblem-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.gov-emblem-icon {
+  font-size: 2.2rem;
+  color: var(--gov-blue-dark);
+  line-height: 1;
+}
+
+.gov-title-group .ministry-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gov-text-muted);
+  margin: 0;
+  font-weight: 600;
+}
+
+.gov-title-group .portal-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--gov-blue-dark);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Government Navigation Bar
+   -------------------------------------------------------------------------- */
+.gov-navbar {
+  background-color: var(--gov-blue-dark);
+  padding: 0;
+  box-shadow: var(--gov-shadow);
+}
+
+.gov-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  padding: 12px 18px !important;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.gov-navbar .nav-link:hover,
+.gov-navbar .nav-link.active {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: var(--gov-saffron);
+}
+
+.gov-navbar .btn-nav-action {
+  background-color: var(--gov-saffron);
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--gov-radius);
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.gov-navbar .btn-nav-action:hover {
+  background-color: #e68524;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   4. Breadcrumb Bar
+   -------------------------------------------------------------------------- */
+.gov-breadcrumb-wrapper {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--gov-border-color);
+  padding: 8px 0;
+  font-size: 0.875rem;
+}
+
+.breadcrumb {
+  margin: 0;
+}
+
+.breadcrumb-item a {
+  color: var(--gov-blue);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   5. Cards & Containers
+   -------------------------------------------------------------------------- */
+.gov-card {
+  background-color: var(--gov-card-bg);
+  border-radius: var(--gov-radius);
+  border: 1px solid var(--gov-border-color);
+  box-shadow: var(--gov-shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gov-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gov-shadow);
+}
+
+.gov-card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--gov-border-color);
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--gov-blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gov-card-body {
+  padding: 20px;
+}
+
+.gov-stat-card {
+  border-left: 4px solid var(--gov-blue);
+  background: #ffffff;
+  padding: 20px;
+  border-radius: var(--gov-radius);
+  box-shadow: var(--gov-shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.gov-stat-card.stat-approved { border-left-color: var(--gov-green); }
+.gov-stat-card.stat-pending { border-left-color: var(--gov-saffron); }
+.gov-stat-card.stat-rejected { border-left-color: #dc3545; }
+
+.gov-stat-card .stat-icon {
+  font-size: 2rem;
+  opacity: 0.85;
+}
+
+.gov-stat-card .stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gov-text-dark);
+  margin-top: 4px;
+}
+
+.gov-stat-card .stat-label {
+  font-size: 0.875rem;
+  color: var(--gov-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   6. Tables & Badges
+   -------------------------------------------------------------------------- */
+.gov-table-container {
+  background: #ffffff;
+  border-radius: var(--gov-radius);
+  border: 1px solid var(--gov-border-color);
+  overflow: hidden;
+  box-shadow: var(--gov-shadow-sm);
+}
+
+.gov-table {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.gov-table th {
+  background-color: #f1f5f9;
+  color: var(--gov-blue-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--gov-border-color);
+}
+
+.gov-table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--gov-border-color);
+  font-size: 0.925rem;
+}
+
+.gov-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.gov-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.gov-badge-approved { background-color: #d1e7dd; color: #0f5132; }
+.gov-badge-pending { background-color: #fff3cd; color: #664d03; }
+.gov-badge-rejected { background-color: #f8d7da; color: #842029; }
+.gov-badge-verified { background-color: #cff4fc; color: #055160; }
+
+/* --------------------------------------------------------------------------
+   7. Form Controls & Floating Labels
+   -------------------------------------------------------------------------- */
+.form-control, .form-select {
+  border-radius: var(--gov-radius);
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid var(--gov-border-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--gov-blue);
+  box-shadow: 0 0 0 0.25rem rgba(11, 94, 215, 0.25);
+}
+
+.required-asterisk {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* --------------------------------------------------------------------------
+   8. Government Footer
+   -------------------------------------------------------------------------- */
+.gov-footer {
+  background-color: #051b3b;
+  color: #ffffff;
+  margin-top: auto;
+  padding-top: 40px;
+  padding-bottom: 20px;
+  font-size: 0.875rem;
+}
+
+.gov-footer h6 {
+  color: var(--gov-saffron);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+.gov-footer a {
+  color: #d0e2ff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.gov-footer a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.gov-footer-bottom {
+  background-color: #031024;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  margin-top: 30px;
+  font-size: 0.8rem;
+  color: #a0aec0;
+}

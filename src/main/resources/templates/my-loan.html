@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Loan Applications | Kisan Rin Yojana</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link th:href="@{/css/gov-portal.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Tricolour Top Accent -->
+<div class="gov-tricolor-strip"></div>
+
+<!-- Utility Header -->
+<div class="gov-utility-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div><i class="bi bi-flag-fill text-warning me-1"></i> Government of India</div>
+        <div>
+            <a th:href="@{/dashboard}" class="me-3"><i class="bi bi-speedometer2 me-1"></i> Dashboard</a>
+            <a th:href="@{/logout}" class="text-danger fw-bold"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Government Header -->
+<div class="gov-main-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="gov-emblem-section">
+            <div class="gov-emblem-icon">🏛️</div>
+            <div class="gov-title-group">
+                <p class="ministry-title">Ministry of Agriculture & Farmers Welfare</p>
+                <h1 class="portal-name">My Crop Loan Applications</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Breadcrumb Bar -->
+<div class="gov-breadcrumb-wrapper">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Loans</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="gov-table-container">
+        <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-primary"><i class="bi bi-journal-check me-2"></i> Registered Loan Applications History</h5>
+            <a th:href="@{/loan}" class="btn btn-primary btn-sm fw-bold"><i class="bi bi-plus-circle me-1"></i> New Application</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table gov-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Crop Type</th>
+                        <th>Loan Amount</th>
+                        <th>Season</th>
+                        <th>Status</th>
+                        <th>Passbook / Photo</th>
+                        <th>Documents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="loan : ${loans}">
+                        <td class="fw-semibold" th:text="${loan.crop}">Wheat</td>
+                        <td class="fw-bold" th:text="'₹ ' + ${loan.amount}">₹ 50,000</td>
+                        <td th:text="${loan.season}">Rabi</td>
+                        <td>
+                            <span th:if="${loan.status == 'Approved'}" class="gov-badge gov-badge-approved"><i class="bi bi-check-circle-fill me-1"></i> Approved</span>
+                            <span th:if="${loan.status == 'Rejected'}" class="gov-badge gov-badge-rejected"><i class="bi bi-x-circle-fill me-1"></i> Rejected</span>
+                            <span th:if="${loan.status == 'Verified'}" class="gov-badge gov-badge-verified"><i class="bi bi-shield-check me-1"></i> Verified</span>
+                            <span th:if="${loan.status != 'Approved' and loan.status != 'Rejected' and loan.status != 'Verified'}" class="gov-badge gov-badge-pending"><i class="bi bi-clock-history me-1"></i> Pending</span>
+                        </td>
+                        <td>
+                            <img th:src="@{'/view/photo/' + ${loan.id}}" width="60" height="60" class="rounded border shadow-sm" alt="Bank Photo"/>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1">
+                                <a th:href="@{'/download/aadhaar/' + ${loan.id}}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-pdf me-1"></i> Aadhaar PDF</a>
+                                <a th:href="@{'/download/land/' + ${loan.id}}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-text me-1"></i> 7/12 Record</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(loans)}">
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                            No loan applications registered under this profile yet.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer class="gov-footer py-3 mt-auto">
+    <div class="container text-center small text-white-50">
+        <p class="mb-0">© 2026 Government of India | Ministry of Agriculture & Farmers Welfare</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

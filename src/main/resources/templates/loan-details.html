@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Loan Inspection Form | Kisan Rin Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link th:href="@{/css/gov-portal.css}" rel="stylesheet">
+    <style>
+        @media print {
+            .gov-tricolor-strip, .gov-utility-header, .gov-navbar, .gov-breadcrumb-wrapper, .gov-footer, .no-print {
+                display: none !important;
+            }
+            body { background: white !important; }
+            .gov-card { box-shadow: none !important; border: 1px solid #000 !important; }
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<!-- Tricolour Top Accent -->
+<div class="gov-tricolor-strip"></div>
+
+<!-- Utility Header -->
+<div class="gov-utility-header no-print">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div><i class="bi bi-flag-fill text-warning me-1"></i> Government of India | Official Inspection View</div>
+        <div>
+            <a th:href="@{/talathi-dashboard}" class="me-3"><i class="bi bi-arrow-left me-1"></i> Back to Dashboard</a>
+            <button onclick="window.print()" class="btn btn-sm btn-dark fw-bold"><i class="bi bi-printer me-1"></i> Print Official Form</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Government Header -->
+<div class="gov-main-header no-print">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="gov-emblem-section">
+            <div class="gov-emblem-icon">🏛️</div>
+            <div class="gov-title-group">
+                <p class="ministry-title">Ministry of Agriculture & Farmers Welfare</p>
+                <h1 class="portal-name">Crop Loan Application Verification Record</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Printable Application Record -->
+<div class="container py-4" style="max-width: 850px;">
+    <div class="gov-card p-4 p-md-5 bg-white">
+        <!-- Print Header -->
+        <div class="text-center border-bottom pb-3 mb-4">
+            <div class="display-6 mb-1">🏛️</div>
+            <h3 class="fw-bold mb-1">GOVERNMENT OF INDIA</h3>
+            <h5 class="text-primary mb-0">Ministry of Agriculture & Farmers Welfare — Kisan Rin Yojana</h5>
+            <small class="text-muted">Form Ref No: KRY-APP-2026-<span th:text="${loan.id}">001</span></small>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold text-dark border-start border-primary border-4 ps-2 mb-0">1. Applicant & Land Record Information</h5>
+            <div>
+                <span th:if="${loan.status == 'Approved'}" class="gov-badge gov-badge-approved"><i class="bi bi-check-circle-fill me-1"></i> Approved</span>
+                <span th:if="${loan.status == 'Rejected'}" class="gov-badge gov-badge-rejected"><i class="bi bi-x-circle-fill me-1"></i> Rejected</span>
+                <span th:if="${loan.status == 'Verified'}" class="gov-badge gov-badge-verified"><i class="bi bi-shield-check me-1"></i> Verified</span>
+                <span th:if="${loan.status != 'Approved' and loan.status != 'Rejected' and loan.status != 'Verified'}" class="gov-badge gov-badge-pending"><i class="bi bi-clock-history me-1"></i> Pending Verification</span>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 border-bottom pb-2"><strong>Registered Mobile:</strong> <span th:text="${loan.mobile}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Crop Category:</strong> <span th:text="${loan.crop}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Agricultural Season:</strong> <span th:text="${loan.season}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Cultivated Land Size:</strong> <span th:text="${loan.landSize} + ' Acres'"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Annual Household Income:</strong> <span th:text="'₹ ' + ${loan.income}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Verification Remark:</strong> <span th:text="${loan.verificationRemark} ?: 'Under Revenue Review'"></span></div>
+        </div>
+
+        <h5 class="fw-bold text-dark border-start border-primary border-4 ps-2 mb-3">2. Bank Financial Assessment</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 border-bottom pb-2"><strong>Requested Amount:</strong> <span class="fw-bold text-primary" th:text="'₹ ' + ${loan.amount}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Bank Credit Score:</strong> <span class="fw-bold" th:text="${loan.creditScore}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Sanctioned Eligible Amount:</strong> <span class="fw-bold text-success" th:text="'₹ ' + ${loan.eligibleAmount}"></span></div>
+            <div class="col-md-6 border-bottom pb-2"><strong>Application Status:</strong> <span class="fw-bold" th:text="${loan.status}"></span></div>
+        </div>
+
+        <h5 class="fw-bold text-dark border-start border-primary border-4 ps-2 mb-3">3. Document Upload Checks</h5>
+        <div class="d-flex flex-wrap gap-2 mb-4 no-print">
+            <a th:href="@{'/download/aadhaar/' + ${loan.id}}" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf me-1"></i> Aadhaar PDF</a>
+            <a th:href="@{'/download/land/' + ${loan.id}}" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-text me-1"></i> 7/12 Land Record</a>
+            <a th:href="@{'/view/photo/' + ${loan.id}}" class="btn btn-outline-primary btn-sm"><i class="bi bi-image me-1"></i> Farmer Photo</a>
+        </div>
+
+        <div class="border rounded p-3 mb-4 bg-light">
+            <h6 class="fw-bold mb-3">Official Signature & Authentication Stamps</h6>
+            <div class="row text-center mt-4">
+                <div class="col-4 border-end">
+                    <div style="height: 40px;"></div>
+                    <small class="d-block text-muted">Farmer Signature</small>
+                </div>
+                <div class="col-4 border-end">
+                    <div style="height: 40px;"></div>
+                    <small class="d-block text-muted">Talathi Seal & Signature</small>
+                </div>
+                <div class="col-4">
+                    <div style="height: 40px;"></div>
+                    <small class="d-block text-muted">Bank Officer Stamp</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center no-print pt-3 border-top">
+            <a th:href="@{/talathi-dashboard}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i> Back to Dashboard</a>
+            <div class="d-flex gap-2" th:if="${loan.status == 'Pending'}">
+                <a th:href="@{'/verify/' + ${loan.id}}" class="btn btn-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Verify & Sanction</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="gov-footer py-3 mt-auto no-print">
+    <div class="container text-center small text-white-50">
+        <p class="mb-0">© 2026 Government of India | Revenue & Agriculture Department</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

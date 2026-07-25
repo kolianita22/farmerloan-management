@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Loan Status | Kisan Rin Yojana Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link th:href="@{/css/gov-portal.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Tricolour Top Accent -->
+<div class="gov-tricolor-strip"></div>
+
+<!-- Utility Header -->
+<div class="gov-utility-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div><i class="bi bi-flag-fill text-warning me-1"></i> Government of India</div>
+        <div><a th:href="@{/}"><i class="bi bi-house-door me-1"></i> Home Portal</a></div>
+    </div>
+</div>
+
+<!-- Main Government Header -->
+<div class="gov-main-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="gov-emblem-section">
+            <div class="gov-emblem-icon">🏛️</div>
+            <div class="gov-title-group">
+                <p class="ministry-title">Ministry of Agriculture & Farmers Welfare</p>
+                <h1 class="portal-name">Public Application Status Tracker</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Breadcrumb Bar -->
+<div class="gov-breadcrumb-wrapper">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Track Status</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Tracker Container -->
+<div class="container py-4" style="max-width: 800px;">
+    <!-- Lookup Card -->
+    <div class="gov-card p-4 mb-4 bg-white">
+        <h4 class="fw-bold text-primary mb-3 text-center"><i class="bi bi-search me-2"></i> Track Crop Loan Application</h4>
+        <p class="text-muted small text-center mb-4">Enter the 10-digit registered mobile number used during loan application submission.</p>
+
+        <form th:action="@{/track-loan}" method="post">
+            <div class="row g-2 justify-content-center">
+                <div class="col-md-8">
+                    <input type="text" name="mobile" class="form-control form-control-lg" placeholder="Enter 10-digit Mobile Number" pattern="[0-9]{10}" maxlength="10" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold"><i class="bi bi-arrow-right-circle me-1"></i> Track Status</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    <div th:if="${not #lists.isEmpty(loans)}">
+        <div th:each="loan : ${loans}" class="gov-card p-4 mb-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                <div>
+                    <h5 class="fw-bold text-dark mb-0">Loan Application Reference</h5>
+                    <small class="text-muted" th:text="'Registered Mobile: ' + ${loan.mobile}">Mobile: 9876543210</small>
+                </div>
+                <div>
+                    <span th:if="${loan.status == 'Approved'}" class="gov-badge gov-badge-approved"><i class="bi bi-check-circle-fill me-1"></i> Approved</span>
+                    <span th:if="${loan.status == 'Rejected'}" class="gov-badge gov-badge-rejected"><i class="bi bi-x-circle-fill me-1"></i> Rejected</span>
+                    <span th:if="${loan.status == 'Verified'}" class="gov-badge gov-badge-verified"><i class="bi bi-shield-check me-1"></i> Revenue Verified</span>
+                    <span th:if="${loan.status != 'Approved' and loan.status != 'Rejected' and loan.status != 'Verified'}" class="gov-badge gov-badge-pending"><i class="bi bi-clock-history me-1"></i> Pending Verification</span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4 text-center text-md-start">
+                <div class="col-6 col-md-3">
+                    <small class="text-muted d-block">Crop Category</small>
+                    <strong class="fs-6" th:text="${loan.crop}">Wheat</strong>
+                </div>
+                <div class="col-6 col-md-3">
+                    <small class="text-muted d-block">Requested Amount</small>
+                    <strong class="fs-6 text-primary" th:text="'₹ ' + ${loan.amount}">₹ 50,000</strong>
+                </div>
+                <div class="col-6 col-md-3">
+                    <small class="text-muted d-block">Season</small>
+                    <strong class="fs-6" th:text="${loan.season}">Kharif</strong>
+                </div>
+                <div class="col-6 col-md-3">
+                    <small class="text-muted d-block">Eligible Amount</small>
+                    <strong class="fs-6 text-success" th:text="'₹ ' + ${loan.eligibleAmount}">₹ 0</strong>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <h6 class="fw-bold text-secondary mb-3">Verification Pipeline</h6>
+            <div class="d-flex justify-content-between text-center mb-2 small fw-bold">
+                <div class="text-success"><i class="bi bi-check-circle-fill me-1"></i> 1. Submitted</div>
+                <div th:class="${loan.status == 'Verified' or loan.status == 'Approved' ? 'text-success' : 'text-muted'}">
+                    <i class="bi bi-shield-check me-1"></i> 2. Talathi Verified
+                </div>
+                <div th:class="${loan.status == 'Approved' ? 'text-success' : 'text-muted'}">
+                    <i class="bi bi-bank me-1"></i> 3. Bank Sanctioned
+                </div>
+            </div>
+
+            <div class="progress" style="height: 12px;">
+                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                     role="progressbar"
+                     th:style="'width: ' + (${loan.status == 'Pending' ? '33%' : (loan.status == 'Verified' ? '66%' : (loan.status == 'Approved' ? '100%' : '15%'))})">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="gov-footer py-3 mt-auto">
+    <div class="container text-center small text-white-50">
+        <p class="mb-0">© 2026 Government of India | Ministry of Agriculture & Farmers Welfare</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
