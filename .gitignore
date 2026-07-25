@@ -34,3 +34,4 @@ build/
 
 ### Uploads ###
 uploads/
+/.apt_generated_tests/
