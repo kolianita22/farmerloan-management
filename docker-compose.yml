@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: farmerloan-app
     ports:
-      - "8080:8080"
+      - "8081:8080" # Mapped to 8081 externally to avoid conflict with local dev server on 8080
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/farmerloan?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=farmer_user
@@ -22,7 +22,7 @@ services:
     image: mysql:8.0
     container_name: farmerloan-db
     ports:
-      - "3306:3306"
+      - "3307:3306" # Mapped to 3307 externally to avoid conflict with host MySQL on 3306
     environment:
       - MYSQL_DATABASE=farmerloan
       - MYSQL_USER=farmer_user
